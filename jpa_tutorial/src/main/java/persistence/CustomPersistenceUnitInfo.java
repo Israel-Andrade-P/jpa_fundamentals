@@ -13,15 +13,42 @@ import java.util.List;
 import java.util.Properties;
 
 public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
+    private final String puName;
+
+    public CustomPersistenceUnitInfo(String puName) {
+        this.puName = puName;
+    }
 
     @Override
     public String getPersistenceUnitName() {
-        return "my-persistence-unit";
+        return puName;
     }
 
     @Override
     public String getPersistenceProviderClassName() {
         return "org.hibernate.jpa.HibernatePersistenceProvider";
+    }
+
+    @Override
+    public DataSource getJtaDataSource() {
+        HikariDataSource datasource = new HikariDataSource();
+        datasource.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
+        datasource.setUsername("root");
+        datasource.setPassword("cheese");
+        return datasource;
+    }
+
+    @Override
+    public List<String> getManagedClassNames() {
+        return List.of(
+                "entities.Product",
+                "entities.Employee"
+                );
+    }
+
+    @Override
+    public PersistenceUnitTransactionType getTransactionType() {
+        return PersistenceUnitTransactionType.RESOURCE_LOCAL;
     }
 
     @Override
@@ -32,20 +59,6 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<String> getQualifierAnnotationNames() {
         return List.of();
-    }
-
-    @Override
-    public PersistenceUnitTransactionType getTransactionType() {
-        return PersistenceUnitTransactionType.RESOURCE_LOCAL;
-    }
-
-    @Override
-    public DataSource getJtaDataSource() {
-        HikariDataSource datasource = new HikariDataSource();
-        datasource.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
-        datasource.setUsername("root");
-        datasource.setPassword("cheese");
-        return datasource;
     }
 
     @Override
@@ -68,10 +81,6 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
         return null;
     }
 
-    @Override
-    public List<String> getManagedClassNames() {
-        return List.of("entities.Product");
-    }
 
     @Override
     public boolean excludeUnlistedClasses() {
