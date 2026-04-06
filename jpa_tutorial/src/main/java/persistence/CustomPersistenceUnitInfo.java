@@ -32,7 +32,7 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public DataSource getJtaDataSource() {
         HikariDataSource datasource = new HikariDataSource();
-        datasource.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
+        datasource.setJdbcUrl("jdbc:mysql://localhost:3306/demodb");
         datasource.setUsername("root");
         datasource.setPassword("cheese");
         return datasource;
@@ -41,7 +41,6 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<String> getManagedClassNames() {
         return List.of(
-                "entities.Product",
                 "entities.Employee"
                 );
     }

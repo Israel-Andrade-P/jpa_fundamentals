@@ -5,7 +5,7 @@
     <persistence-unit name="my-persistence-unit" transaction-type="RESOURCE_LOCAL">
         <description>description</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>entities.Product</class>
+        <!--<class>entities.Product</class>-->
 
         <properties>
             <!-- database connection -->
