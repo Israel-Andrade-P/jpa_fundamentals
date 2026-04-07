@@ -2,22 +2,22 @@ package entities;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "employees")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)//IDENTITY - adds auto_increment to field Id
-    private UUID id;                               //TABLE - it creates a separate table that keeps track of the next id value(performance wise its not a good strategy)
-    private String name;                           //UUID - it generates UUIDs for Id field instead of numbers
+//    @GenericGenerator(name = "UUIDGenerator", type = UUIDGenerator.class)//custom Id generator, but this has been deprecated
+    @GeneratedValue(strategy = GenerationType.IDENTITY)     //IDENTITY - adds auto_increment to field Id
+    @Column(length = 1000)
+    private Long id;                               //TABLE - it creates a separate table that keeps track of the next id value(performance wise its not a good strategy)
+    private String name;                             //UUID - it generates UUIDs for Id field instead of numbers
     private String address;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,4 +1,7 @@
 import entities.Employee;
+import entities.Product;
+import entities.Student;
+import entities.keys.StudentKey;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -15,9 +18,8 @@ void main() {
     EntityManagerFactory factory = new HibernatePersistenceProvider()
             .createContainerEntityManagerFactory(new CustomPersistenceUnitInfo(puName), props);
     //The Persistence Context is created when the EntityManager is created
-    EntityManager em = factory.createEntityManager();
 
-    try {
+    try (EntityManager em = factory.createEntityManager()) {
         em.getTransaction().begin();
 
 //        em.persist(); -> adds entity to context, transitions from transient to managed, and marks it to persist, schedules an INSERT
@@ -28,14 +30,16 @@ void main() {
 //        em.detach();  -> detaches it from the context, changes are no longer tracked, no SQL will be generated for it
 //        em.getReference(); -> it gets a shell of the entity, no queries are sent to db, unless you do something with it
 
-        var e1 = new Employee();
-        e1.setName("karen");
-        e1.setAddress("71th");
+        StudentKey id = new StudentKey();
+        id.setCode("QWE");
+        id.setNumber(30L);
 
-        em.persist(e1);
+        Student student = new Student();
+        student.setId(id);
+        student.setName("john");
+
+        em.persist(student);
 
         em.getTransaction().commit();
-    } finally {
-        em.close();
     }
 }
