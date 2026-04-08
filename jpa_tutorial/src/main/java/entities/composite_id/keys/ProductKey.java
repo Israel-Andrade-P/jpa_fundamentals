@@ -1,12 +1,9 @@
-package entities.keys;
-
-import jakarta.persistence.Embeddable;
+package entities.composite_id.keys;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable
-public class StudentKey implements Serializable {
+public class ProductKey implements Serializable {
     private String code;
     private Long number;
 
@@ -29,7 +26,7 @@ public class StudentKey implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        StudentKey that = (StudentKey) o;
+        ProductKey that = (ProductKey) o;
         return Objects.equals(code, that.code) && Objects.equals(number, that.number);
     }
 

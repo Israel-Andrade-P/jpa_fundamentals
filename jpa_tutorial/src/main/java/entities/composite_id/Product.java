@@ -1,6 +1,6 @@
 package entities;
 
-import entities.keys.ProductKey;
+import entities.composite_id.keys.ProductKey;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;

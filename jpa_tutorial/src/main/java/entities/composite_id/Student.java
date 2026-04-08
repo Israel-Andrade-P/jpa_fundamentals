@@ -1,6 +1,6 @@
 package entities;
 
-import entities.keys.StudentKey;
+import entities.composite_id.keys.StudentKey;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
