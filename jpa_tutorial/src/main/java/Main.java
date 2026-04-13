@@ -1,5 +1,4 @@
-import entities.Passport;
-import entities.Person;
+import entities.jpql.Car;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -12,7 +11,7 @@ void main() {
     props.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
     props.put("hibernate.show_sql", "true");
     //never have this config in production, use a db versioning tool, never trust jpa
-    props.put("hibernate.hbm2ddl.auto", "create");//create- drops if it exists and recreates tables | update- updates tables
+    props.put("hibernate.hbm2ddl.auto", "none");//create- drops if it exists and recreates tables | update- updates tables
 //    EntityManagerFactory factory = Persistence.createEntityManagerFactory("my-persistence-unit");
     EntityManagerFactory factory = new HibernatePersistenceProvider()
             .createContainerEntityManagerFactory(new CustomPersistenceUnitInfo(puName), props);
@@ -29,22 +28,17 @@ void main() {
 //        em.detach();  -> detaches it from the context, changes are no longer tracked, no SQL will be generated for it
 //        em.getReference(); -> it gets a shell of the entity, no queries are sent to db, unless you do something with it
 
-        Person person = new Person();
-        person.setName("Kyle");
+        String jpql = """
+                select c.model, avg(c.price) 
+                from Car c
+                group by c.model 
+                """;
 
-        Passport passport = new Passport();
-        passport.setNumber("6969");
+        TypedQuery<Object[]> result = em.createQuery(jpql, Object[].class);
 
-        person.setPassport(passport);
-        passport.setPerson(person);
-
-        em.persist(person);
-        em.persist(passport);
-
-        //In a one to one, one-directional relationship we are able to get passport info through the person, but not the other way around
-//        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.passport.number =:number", Person.class);
-//        q.setParameter("number", "6969");
-//        System.out.println(q.getResultList());
+        result.getResultList().forEach(objects -> {
+            System.out.println(objects[0] + "-" + objects[1]);
+        });
 
         em.getTransaction().commit();
     }

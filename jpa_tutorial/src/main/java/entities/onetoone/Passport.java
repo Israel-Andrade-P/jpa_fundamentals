@@ -1,4 +1,4 @@
-package entities;
+package entities.onetoone;
 
 import jakarta.persistence.*;
 
@@ -44,3 +44,7 @@ public class Passport {
                 '}';
     }
 }
+//        In a one to one, one-directional relationship we are able to get passport info through the person, but not the other way around
+//        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.passport.number =:number", Person.class);
+//        q.setParameter("number", "6969");
+//        System.out.println(q.getResultList());
