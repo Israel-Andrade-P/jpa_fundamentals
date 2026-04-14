@@ -1,4 +1,5 @@
-import entities.jpql.Car;
+import entities.jpql.Student;
+import entities.jpql.dto.CountForStudentEnrollments;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -29,16 +30,13 @@ void main() {
 //        em.getReference(); -> it gets a shell of the entity, no queries are sent to db, unless you do something with it
 
         String jpql = """
-                select c.model, avg(c.price) 
-                from Car c
-                group by c.model 
+                SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s, (SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id)) 
+                FROM Student s
                 """;
 
-        TypedQuery<Object[]> result = em.createQuery(jpql, Object[].class);
+        TypedQuery<CountForStudentEnrollments> result = em.createQuery(jpql, CountForStudentEnrollments.class);
 
-        result.getResultList().forEach(objects -> {
-            System.out.println(objects[0] + "-" + objects[1]);
-        });
+        result.getResultList().forEach(c -> IO.println(c.student() + " - " + c.count()));
 
         em.getTransaction().commit();
     }

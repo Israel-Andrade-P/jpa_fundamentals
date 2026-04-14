@@ -41,7 +41,9 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<String> getManagedClassNames() {
         return List.of(
-                "entities.jpql.Car"
+                "entities.jpql.Student",
+                "entities.jpql.Course",
+                "entities.jpql.Enrollment"
                 );
     }
 
