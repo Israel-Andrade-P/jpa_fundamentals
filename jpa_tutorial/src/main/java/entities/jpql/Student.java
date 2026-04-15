@@ -7,6 +7,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students")
+@NamedQueries(
+        value = {
+                @NamedQuery(
+                        name = "getAll",
+                        query = "SELECT s FROM Student s"
+                ),
+                @NamedQuery(
+                        name = "getEnrolledStudents",
+                        query = "SELECT s FROM Student s JOIN s.enrollments"
+                )
+        }
+)
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

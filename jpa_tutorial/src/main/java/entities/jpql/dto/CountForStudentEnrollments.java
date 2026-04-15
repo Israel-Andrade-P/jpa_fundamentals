@@ -2,5 +2,5 @@ package entities.jpql.dto;
 
 import entities.jpql.Student;
 
-public record CountForStudentEnrollments(Student student, Long count) {
+public record CountForStudentEnrollments(String name, Long count) {
 }

@@ -30,13 +30,16 @@ void main() {
 //        em.getReference(); -> it gets a shell of the entity, no queries are sent to db, unless you do something with it
 
         String jpql = """
-                SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s, (SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id)) 
+                SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s.name, count(s)) 
                 FROM Student s
+                GROUP BY s.name
+                HAVING s.name LIKE '%e'
+                ORDER BY s.name DESC
                 """;
 
-        TypedQuery<CountForStudentEnrollments> result = em.createQuery(jpql, CountForStudentEnrollments.class);
+        TypedQuery<Student> result = em.createNamedQuery("getAll", Student.class);
 
-        result.getResultList().forEach(c -> IO.println(c.student() + " - " + c.count()));
+        result.getResultList().forEach(IO::println);
 
         em.getTransaction().commit();
     }

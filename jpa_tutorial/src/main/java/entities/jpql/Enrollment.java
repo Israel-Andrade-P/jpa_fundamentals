@@ -86,4 +86,9 @@ SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s, (SELECT COUNT(e) FROM
 
 inner queries:
 SELECT s FROM Student s WHERE (SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id) > 2
+
+usually aggregates like COUNT, AVG, SUM we use a GROUP BY with it:
+SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s.name, count(s)) FROM Student s GROUP BY s.name
+HAVING is a conditional that comes after GROUP BY
+SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s.name, count(s)) FROM Student s GROUP BY s.name HAVING s.name LIKE 'A%' ORDER BY s.name DESC
 */
