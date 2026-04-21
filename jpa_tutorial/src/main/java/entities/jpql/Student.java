@@ -56,3 +56,8 @@ public class Student {
                 '}';
     }
 }
+//you can create procedures in db to abstract away complex queries and call them using jpa like this:
+/* StoredProcedureQuery query = em.createStoredProcedureQuery("GetStudents", Student.class)
+        .registerStoredProcedureParameter("id", Long.class, ParameterMode.IN)
+        .setParameter("id", 3);
+*/

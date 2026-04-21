@@ -1,8 +1,9 @@
-import entities.jpql.Student;
-import entities.jpql.dto.CountForStudentEnrollments;
+import entities.criteriaquery.Author;
+import entities.criteriaquery.Book;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import persistence.CustomPersistenceUnitInfo;
 
@@ -29,17 +30,24 @@ void main() {
 //        em.detach();  -> detaches it from the context, changes are no longer tracked, no SQL will be generated for it
 //        em.getReference(); -> it gets a shell of the entity, no queries are sent to db, unless you do something with it
 
-        String jpql = """
-                SELECT NEW entities.jpql.dto.CountForStudentEnrollments(s.name, count(s)) 
-                FROM Student s
-                GROUP BY s.name
-                HAVING s.name LIKE '%e'
-                ORDER BY s.name DESC
-                """;
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Author> mainQuery = builder.createQuery(Author.class);
+        Root<Author> authorRoot = mainQuery.from(Author.class);
 
-        TypedQuery<Student> result = em.createNamedQuery("getAll", Student.class);
+        /*
+        SELECT a, (SELECT COUNT(b) FROM Book b JOIN Author a ON b.id IN a.books) n FROM Author a WHERE n > 2
+         */
 
-        result.getResultList().forEach(IO::println);
+        Subquery<Long> subquery = mainQuery.subquery(Long.class);
+        Root<Author> subRootAuthor = subquery.correlate(authorRoot);
+        Join<Author, Book> authorBookJoin = subRootAuthor.join("books");
+
+        subquery.select(builder.count(authorBookJoin));
+        mainQuery.select(authorRoot).where(builder.greaterThan(subquery, 2L));
+
+        TypedQuery<Author> q = em.createQuery(mainQuery);
+
+        q.getResultList().forEach(IO::println);
 
         em.getTransaction().commit();
     }
