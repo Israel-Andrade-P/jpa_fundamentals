@@ -1,9 +1,6 @@
 package entities.criteriaquery;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +41,22 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public Set<BookShop> getBookShops() {
+        return bookShops;
+    }
+
+    public void setBookShops(Set<BookShop> bookShops) {
+        this.bookShops = bookShops;
     }
 
     @Override
